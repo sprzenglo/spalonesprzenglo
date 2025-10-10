@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wielka księga sprzengla</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Times New Roman', Times, serif; background: #f8f8f8; margin: 0; }
+    .header { background: #e0e0e0; padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
+    .search-bar { display: flex; justify-content: center; margin: 20px 0; }
+    .search-bar input { width: 300px; font-size: 1em; padding: 8px; }
+    .contents { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid #222; box-shadow: none; padding: 20px; }
+    .category { margin-bottom: 20px; }
+    .category-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; cursor: pointer; background: #eaeaea; border: 1px solid #222; padding: 8px; }
+    .article-list { display: none; flex-direction: column; gap: 0; border: none; margin-top: 0; }
+    .article-link { background: none; border: none; padding: 0; text-decoration: underline; color: #222; font-size: 1em; display: block; text-align: left; margin: 4px 0; }
+    .article-link:hover { color: #0055cc; }
+    .category.open .article-list { display: flex; }
+    .photo { display: flex; align-items: right;}
+  </style>
+</head>
+<body>
+  <div class="header">wielka księga sprzengla</div>
+
+  <div class="search-bar" style="position:relative;">
+    <input type="text" id="search" placeholder="Szukaj artykułu..." autocomplete="off" oninput="showSuggestions()" onkeydown="searchKeyDown(event)">
+    <button onclick="searchGo()">Szukaj</button>
+    <ul id="suggestions" style="position:absolute; left:0; background:#fff; border:1px solid #222; width:300px; list-style:none; margin:0; padding:0; z-index:10; display:none;"></ul>
+  </div>
+  <div style="display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto;">
+    <div class="contents" style="flex: 1;">
+    <div class="category" id="cat-animals">
+      <div class="category-title" onclick="toggleCategory('cat-animals')">Zwierzęta ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="pipotam.html">Pipotam</a>
+        <a class="article-link" href="animal1.html">Animal 1</a>
+        <a class="article-link" href="animal2.html">Animal 2</a>
+        <a class="article-link" href="animal3.html">Animal 3</a>
+        <a class="article-link" href="animal4.html">Animal 4</a>
+        <a class="article-link" href="animal5.html">Animal 5</a>
+        <a class="article-link" href="animal6.html">Animal 6</a>
+        <a class="article-link" href="animal7.html">Animal 7</a>
+      </div>
+    </div>
+    <div class="category" id="cat-cars">
+      <div class="category-title" onclick="toggleCategory('cat-cars')">Samochody ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="car1.html">Car 1</a>
+        <a class="article-link" href="car2.html">Car 2</a>
+        <a class="article-link" href="car3.html">Car 3</a>
+        <a class="article-link" href="car4.html">Car 4</a>
+        <a class="article-link" href="car5.html">Car 5</a>
+        <a class="article-link" href="car6.html">Car 6</a>
+        <a class="article-link" href="car7.html">Car 7</a>
+        <a class="article-link" href="car8.html">Car 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-memes">
+      <div class="category-title" onclick="toggleCategory('cat-memes')">śmieszne obrazki ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="meme1.html">67 dziecko</a>
+        <a class="article-link" href="meme2.html">Meme 2</a>
+        <a class="article-link" href="meme3.html">Meme 3</a>
+        <a class="article-link" href="meme4.html">Meme 4</a>
+        <a class="article-link" href="meme5.html">Meme 5</a>
+        <a class="article-link" href="meme6.html">Meme 6</a>
+        <a class="article-link" href="meme7.html">Meme 7</a>
+        <a class="article-link" href="meme8.html">Meme 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-4">
+      <div class="category-title" onclick="toggleCategory('cat-4')">Kategoria 4 ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="cat4_1.html">Cat4 1</a>
+        <a class="article-link" href="cat4_2.html">Cat4 2</a>
+        <a class="article-link" href="cat4_3.html">Cat4 3</a>
+        <a class="article-link" href="cat4_4.html">Cat4 4</a>
+        <a class="article-link" href="cat4_5.html">Cat4 5</a>
+        <a class="article-link" href="cat4_6.html">Cat4 6</a>
+        <a class="article-link" href="cat4_7.html">Cat4 7</a>
+        <a class="article-link" href="cat4_8.html">Cat4 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-5">
+      <div class="category-title" onclick="toggleCategory('cat-5')">Kategoria 5 ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="cat5_1.html">Cat5 1</a>
+        <a class="article-link" href="cat5_2.html">Cat5 2</a>
+        <a class="article-link" href="cat5_3.html">Cat5 3</a>
+        <a class="article-link" href="cat5_4.html">Cat5 4</a>
+        <a class="article-link" href="cat5_5.html">Cat5 5</a>
+        <a class="article-link" href="cat5_6.html">Cat5 6</a>
+        <a class="article-link" href="cat5_7.html">Cat5 7</a>
+        <a class="article-link" href="cat5_8.html">Cat5 8</a>
+      </div>
+    </div>
+    </div>
+    <img src="pipotam.gif" alt="Pipotam" style="max-width:220px; margin-left:30px; border:1px solid #222;">
+  </div>
+  <script>
+    // --- Collapsible categories ---
+    function toggleCategory(id) {
+      var cat = document.getElementById(id);
+      if (cat.classList.contains('open')) {
+        cat.classList.remove('open');
+      } else {
+        cat.classList.add('open');
+      }
+    }
+    document.getElementById('cat-animals').classList.add('open');
+
+    // --- Searchbar logic ---
+    // Dynamically collect all article-link names and hrefs
+    let articles = [];
+    window.addEventListener('DOMContentLoaded', function() {
+      articles = Array.from(document.querySelectorAll('.article-link')).map(a => ({name: a.textContent.trim(), link: a.getAttribute('href')}));
+    });
+
+    function showSuggestions() {
+      const input = document.getElementById('search').value.trim().toLowerCase();
+      const sugg = document.getElementById('suggestions');
+      const searchInput = document.getElementById('search');
+      if (!input) { sugg.style.display = 'none'; sugg.innerHTML = ''; return; }
+      const matches = articles.filter(a => a.name.toLowerCase().includes(input)).slice(0,5);
+      if (matches.length === 0) { sugg.style.display = 'none'; sugg.innerHTML = ''; return; }
+      sugg.innerHTML = matches.map(a => `<li style='padding:6px; cursor:pointer;' onclick="window.location.href='${a.link}'">${a.name}</li>`).join('');
+      // Position suggestions under the input
+      const rect = searchInput.getBoundingClientRect();
+      sugg.style.left = searchInput.offsetLeft + 'px';
+      sugg.style.top = (searchInput.offsetTop + searchInput.offsetHeight) + 'px';
+      sugg.style.display = 'block';
+    }
+
+    function searchGo() {
+      const input = document.getElementById('search').value.trim().toLowerCase();
+      if (!input) return;
+      const match = articles.find(a => a.name.toLowerCase() === input) || articles.find(a => a.name.toLowerCase().includes(input));
+      if (match) window.location.href = match.link;
+    }
+
+    function searchKeyDown(e) {
+      if (e.key === 'Enter') {
+        searchGo();
+      }
+    }
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('search').contains(e.target)) {
+        document.getElementById('suggestions').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
