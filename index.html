@@ -7,10 +7,13 @@
     <style>
       body {
         background: #f7f7f7;
-        font-family: Arial, sans-serif;
+        font-family: 'Times New Roman', Times, serif;
         margin: 0;
         padding: 0;
         text-align: center;
+      }
+      h1, h2, h3, h4, h5, h6, #score, button, p, div, section {
+        font-family: 'Times New Roman', Times, serif !important;
       }
       h1 {
         margin-top: 30px;
@@ -33,9 +36,13 @@
         <h1>spalone sprzengło</h1>
         <hr>
       </center>
-      <canvas id="game" width="600" height="150"></canvas>
+      <canvas id="game" width="600" height="150" style="touch-action:none;"></canvas>
       <div id="score">Score: 0</div>
       <button id="startBtn">Start</button>
+      <div id="mobileControls" style="margin:15px 0; display:flex; justify-content:center; gap:10px;">
+        <button id="jumpBtn" style="font-size:18px; padding:10px 20px;">Jump</button>
+        <button id="pauseBtn" style="font-size:18px; padding:10px 20px;">Pause</button>
+      </div>
       <script>
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
@@ -125,44 +132,66 @@
           requestAnimationFrame(gameLoop);
         }
 
+
+        // Keyboard controls
         document.addEventListener('keydown', function(e) {
           if ((e.code === 'Space' || e.key === 'w' || e.key === 'ArrowUp') && !dino.jumping && !gameOver && started && !paused) {
-            dino.vy = -15; // Higher jump for easier obstacle clearance
-            dino.jumping = true;
+            jump();
           }
           if (gameOver && (e.code === 'Space' || e.key === 'r')) {
-            // Restart
-            obstacles = [];
-            score = 0;
-            gameOver = false;
-            dino.y = 110;
-            dino.vy = 0;
-            started = true;
-            paused = false;
-            document.getElementById('startBtn').disabled = true;
-            requestAnimationFrame(gameLoop);
+            startGame();
           }
           if (e.key === 'p' || e.key === 'P') {
-            if (started && !gameOver) {
-              paused = !paused;
-              if (!paused) requestAnimationFrame(gameLoop);
-            }
+            togglePause();
           }
         });
 
-        document.getElementById('startBtn').onclick = function() {
-          if (!started) {
-            obstacles = [];
-            score = 0;
-            gameOver = false;
-            dino.y = 110;
-            dino.vy = 0;
-            started = true;
-            paused = false;
-            this.disabled = true;
-            requestAnimationFrame(gameLoop);
-          }
-        };
+        // Touch controls for mobile
+        document.getElementById('jumpBtn').addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          if (!dino.jumping && !gameOver && started && !paused) jump();
+        });
+        document.getElementById('pauseBtn').addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          if (started && !gameOver) togglePause();
+        });
+        document.getElementById('startBtn').addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          if (!started) startGame();
+        });
+
+        // Also allow click for mobile controls
+        document.getElementById('jumpBtn').addEventListener('click', function() {
+          if (!dino.jumping && !gameOver && started && !paused) jump();
+        });
+        document.getElementById('pauseBtn').addEventListener('click', function() {
+          if (started && !gameOver) togglePause();
+        });
+        document.getElementById('startBtn').addEventListener('click', function() {
+          if (!started) startGame();
+        });
+
+        function jump() {
+          dino.vy = -15;
+          dino.jumping = true;
+        }
+
+        function togglePause() {
+          paused = !paused;
+          if (!paused) requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+          obstacles = [];
+          score = 0;
+          gameOver = false;
+          dino.y = 110;
+          dino.vy = 0;
+          started = true;
+          paused = false;
+          document.getElementById('startBtn').disabled = true;
+          requestAnimationFrame(gameLoop);
+        }
 
         // Initial state: show ground and dino only
         function drawInitial() {
@@ -179,4 +208,3 @@
     </main>
   </body>
 </html>
-
