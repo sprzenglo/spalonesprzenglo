@@ -1,0 +1,23 @@
+.titul {
+    text-align: left;
+    margin-left: 20px;
+}
+
+.opispipotama {
+    display: flex;
+    background-color: antiquewhite;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.dzikipipotam {
+    margin-top: 40px;
+    padding: 30px;
+}
+
+.opisdzikiegopipotama {
+    display: flex;
+    background-color: antiquewhite;
+    border-radius: 3px;
+    padding: 10px;
+}
