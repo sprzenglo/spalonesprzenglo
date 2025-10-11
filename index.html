@@ -1,104 +1,149 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>wielka księga sprzengla</title>
-<link rel="stylesheet" href="style.css">
-<style>
-body { font-family: 'Times New Roman', Times, serif; background: #f8f8f8; margin:0; }
-.header { background: #2908ce; color: white; padding: 20px; text-align:center; font-size:2em; font-weight:bold; }
-.contents { max-width:900px; margin:20px auto; background:#fff; border:1px solid #222; padding:20px; }
-.category-title { cursor:pointer; font-weight:bold; margin-top:10px; }
-.article-list a { display:block; margin:4px 0; text-decoration:underline; color:#010de7; }
-.comments { margin-top:40px; border-top:2px solid #222; padding-top:20px; }
-.comment { border-bottom:1px solid #ccc; padding:6px; margin-bottom:6px; }
-.comment button { font-size:0.8em; margin-left:10px; }
-textarea,input { width:300px; margin-top:4px; margin-bottom:4px; padding:4px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wielka księga sprzengla</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Times New Roman', Times, serif; background: #f8f8f8; margin: 0; }
+    .header { background: #2908ce; color: white; padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
+    .search-bar { display: flex; justify-content: center; margin: 20px 0; }
+    .search-bar input { width: 300px; font-size: 1em; padding: 8px; }
+    .contents { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid #222; box-shadow: none; padding: 20px; }
+    .category { margin-bottom: 20px; }
+    .category-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; cursor: pointer; background: #eaeaea; border: 1px solid #222; padding: 8px; }
+    .article-list { display: none; flex-direction: column; gap: 0; border: none; margin-top: 0; }
+    .article-link { background: none; border: none; padding: 0; text-decoration: underline; color: #010de7; font-size: 1em; display: block; text-align: left; margin: 4px 0; }
+    .article-link:hover { color: #022d69; transform: scale(1.01);}
+    .category.open .article-list { display: flex; }
+    .photo { display: flex; align-items: right;}
+    
+    /* --- Chat section --- */
+    #chat-container { margin-left: 30px; max-width: 300px; width: 100%; border: 1px solid #222; background: #fff; padding: 10px; }
+    #chat-messages { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 6px; margin-bottom: 8px; }
+    #chat-input { width: 100%; padding: 6px; margin-bottom: 6px; box-sizing: border-box; }
+    #chat-send { padding: 6px 12px; cursor: pointer; }
+    .chat-message { margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+    .chat-message span { font-weight: bold; margin-right: 4px; }
+    .chat-delete { color: red; cursor: pointer; font-size: 0.9em; margin-left: 6px; }
+  </style>
 </head>
 <body>
-
 <div class="header">wielka księga sprzengla</div>
 
-<div class="contents">
-  <div class="category">
-    <div class="category-title">Zwierzęta ▼</div>
-    <div class="article-list">
-      <a href="pipotam.html">Pipotam</a>
-      <a href="animal1.html">Meowl</a>
-      <a href="animal2.html">homik</a>
-      <a href="animal3.html">kuc z bronksu</a>
-    </div>
-  </div>
-  <div class="category">
-    <div class="category-title">top samochody oat ▼</div>
-    <div class="article-list">
-      <a href="car1.html">Civic 4th Generation</a>
-      <a href="car2.html">Porsche 935</a>
-    </div>
-  </div>
-  
-  <!-- WSPÓLNE OKIENKO KOMENTARZY -->
-  <div class="comments">
-    <h2>Czat / komentarze</h2>
-    <div id="comments-container"></div>
+<div class="search-bar" style="position:relative;">
+  <input type="text" id="search" placeholder="Szukaj artykułu..." autocomplete="off" oninput="showSuggestions()" onkeydown="searchKeyDown(event)">
+  <button onclick="searchGo()">Szukaj</button>
+  <ul id="suggestions" style="position:absolute; left:0; background:#fff; border:1px solid #222; width:300px; list-style:none; margin:0; padding:0; z-index:10; display:none;"></ul>
+</div>
 
-    <h3>Dodaj komentarz</h3>
-    <input type="text" id="name" placeholder="Twoje imię"><br>
-    <textarea id="content" placeholder="Treść komentarza" rows="3"></textarea><br>
-    <button onclick="addComment()">Wyślij</button>
+<div style="display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto;">
+  <div class="contents" style="flex: 1;">
+    <!-- Tutaj wszystkie kategorie -->
+    <div class="category" id="cat-animals">
+      <div class="category-title" onclick="toggleCategory('cat-animals')">Zwierzęta ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="pipotam.html">Pipotam</a>
+        <a class="article-link" href="animal1.html">Meowl</a>
+        <a class="article-link" href="animal2.html">homik</a>
+        <a class="article-link" href="animal3.html">kuc z bronksu</a>
+      </div>
+    </div>
+    <!-- inne kategorie tutaj ... -->
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:flex-start;">
+    <img src="pipotam.gif" alt="pipotam" style="max-width:220px; margin-bottom:10px; border:1px solid #222;">
+    <img src="meowl.webp" alt="meowl" style="max-width:220px; margin-bottom:10px; border:1px solid #222;">
+
+    <!-- --- Chat section --- -->
+    <div id="chat-container">
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Napisz wiadomość...">
+      <button id="chat-send">Wyślij</button>
+      <div style="margin-top:6px;font-size:0.9em;">Aby usunąć wiadomość: hasło admina 123Q123q</div>
+    </div>
   </div>
 </div>
 
 <script>
-const API_BASE = 'http://localhost:10000'; // Twój backend
+const API_BASE = 'https://spalonesprzenglo-backend.onrender.com'; // Twój backend
 
-async function loadComments() {
-  const res = await fetch(`${API_BASE}/comments`);
-  const comments = await res.json();
-  const container = document.getElementById('comments-container');
-  container.innerHTML = comments.map(c => `
-    <div class="comment" id="comment-${c._id}">
-      <b>${c.name}</b>: ${c.content} <small>${new Date(c.date).toLocaleString()}</small>
-      <button onclick="deleteComment('${c._id}')">Usuń</button>
-    </div>
-  `).join('');
+// --- Collapsible categories ---
+function toggleCategory(id) {
+  const cat = document.getElementById(id);
+  cat.classList.toggle('open');
+}
+document.getElementById('cat-animals').classList.add('open');
+
+// --- Searchbar ---
+let articles = [];
+window.addEventListener('DOMContentLoaded', () => {
+  articles = Array.from(document.querySelectorAll('.article-link')).map(a => ({name:a.textContent.trim(), link:a.getAttribute('href')}));
+});
+
+// Suggestions
+function showSuggestions() {
+  const input = document.getElementById('search').value.trim().toLowerCase();
+  const sugg = document.getElementById('suggestions');
+  if (!input) { sugg.style.display='none'; sugg.innerHTML=''; return; }
+  const matches = articles.filter(a=>a.name.toLowerCase().includes(input)).slice(0,5);
+  if (!matches.length) { sugg.style.display='none'; sugg.innerHTML=''; return; }
+  sugg.innerHTML = matches.map(a=>`<li style='padding:6px; cursor:pointer;' onclick="window.location.href='${a.link}'">${a.name}</li>`).join('');
+  const searchInput = document.getElementById('search');
+  sugg.style.left = searchInput.offsetLeft+'px';
+  sugg.style.top = (searchInput.offsetTop+searchInput.offsetHeight)+'px';
+  sugg.style.display='block';
 }
 
-async function addComment() {
-  const name = document.getElementById('name').value.trim();
-  const content = document.getElementById('content').value.trim();
-  if(!name || !content) return alert('Podaj imię i treść');
-  
-  await fetch(`${API_BASE}/comments`, {
+function searchGo() {
+  const input = document.getElementById('search').value.trim().toLowerCase();
+  if (!input) return;
+  const match = articles.find(a=>a.name.toLowerCase()===input) || articles.find(a=>a.name.toLowerCase().includes(input));
+  if(match) window.location.href=match.link;
+}
+function searchKeyDown(e){ if(e.key==='Enter') searchGo(); }
+document.addEventListener('click', e=>{ if(!document.getElementById('search').contains(e.target)) document.getElementById('suggestions').style.display='none'; });
+
+// --- Chat functionality ---
+async function loadChat() {
+  const res = await fetch(API_BASE + '/chat');
+  const messages = await res.json();
+  const container = document.getElementById('chat-messages');
+  container.innerHTML = '';
+  messages.forEach(msg => {
+    const div = document.createElement('div');
+    div.className = 'chat-message';
+    div.innerHTML = `<span>${msg.user}</span>: ${msg.text} ${msg.user==='admin' ? `<span class="chat-delete" onclick="deleteMessage('${msg._id}')">[usuń]</span>` : ''}`;
+    container.appendChild(div);
+  });
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  await fetch(API_BASE + '/chat', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({name, content})
+    body: JSON.stringify({user:'user', text})
   });
-  
-  document.getElementById('name').value='';
-  document.getElementById('content').value='';
-  loadComments();
+  input.value='';
+  loadChat();
 }
 
-async function deleteComment(id) {
-  const password = prompt('Podaj hasło do usunięcia komentarza:');
-  if(!password) return;
-  
-  const res = await fetch(`${API_BASE}/comments/delete`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ id, password })
-  });
-  const data = await res.json();
-  if(data.success) loadComments();
-  else alert(data.msg || 'Błąd');
+async function deleteMessage(id){
+  const pwd = prompt("Podaj hasło admina:");
+  if(pwd !== '123Q123q') { alert('Błędne hasło'); return; }
+  await fetch(API_BASE + '/chat/' + id, { method:'DELETE' });
+  loadChat();
 }
 
-// inicjalizacja
-loadComments();
+document.getElementById('chat-send').addEventListener('click', sendMessage);
+window.onload = loadChat;
+setInterval(loadChat, 5000); // automatyczne odświeżanie co 5 sekund
 </script>
-
 </body>
 </html>
