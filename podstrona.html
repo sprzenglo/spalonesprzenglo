@@ -1,121 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple MP4 Player</title>
-  <style>
-    .video-container {
-      position: relative;
-      max-width: 800px;
-      margin: 0 auto;
-      background: #000;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    #video {
-      width: 100%;
-      height: auto;
-      display: block;
-      cursor: pointer;
-    }
-    .controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 10px;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-      display: flex;
-      align-items: center;
-      opacity: 0.3;
-      transition: opacity 0.3s ease;
-    }
-    .video-container:hover .controls {
-      opacity: 1;
-    }
-    .control-button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: white;
-      margin: 0 5px;
-      padding: 5px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.2s, transform 0.2s;
-    }
-    .control-button:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-    .control-button:active {
-      transform: scale(0.95);
-    }
-    .volume-slider {
-      width: 80px;
-      height: 5px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 5px;
-      margin: 0 10px;
-      cursor: pointer;
-    }
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      background: white;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-  <h1>Simple MP4 Player</h1>
-  <div class="video-container">
-    <video id="video" width="800" poster="https://example.com/thumbnail.jpg">
-      <source src="https://example.com/video.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-    <div class="controls">
-      <button id="playPause" class="control-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z" fill="white"/>
-        </svg>
-      </button>
-      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1" />
-    </div>
-  </div>
-
-  <script>
-    const video = document.getElementById('video');
-    const playPauseBtn = document.getElementById('playPause');
-    const volumeSlider = document.getElementById('volumeSlider');
-
-    // Play/Pause toggle
-    playPauseBtn.addEventListener('click', () => {
-      if (video.paused) {
-        video.play();
-        playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="white"/></svg>';
-      } else {
-        video.pause();
-        playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="white"/></svg>';
-      }
-    });
-
-    // Volume control
-    volumeSlider.addEventListener('input', () => {
-      video.volume = volumeSlider.value;
-    });
-
-    // Optional: Update volume icon based on mute state
-    video.addEventListener('volumechange', () => {
-      if (video.volume === 0) {
-        volumeSlider.value = 0;
-      }
-    });
-  </script>
+  <video width="640" height="360" controls>
+    <source src="your-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </body>
 </html>   
