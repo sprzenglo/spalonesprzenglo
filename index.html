@@ -7,21 +7,37 @@
   <link rel="stylesheet" href="style.css">
   <style>
     body { font-family: 'Times New Roman', Times, serif; background: #f8f8f8; margin: 0; }
-    .header { background: #e0e0e0; padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
+    .header { background: #2908ce; color: white; padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
     .search-bar { display: flex; justify-content: center; margin: 20px 0; }
     .search-bar input { width: 300px; font-size: 1em; padding: 8px; }
     .contents { max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid #222; box-shadow: none; padding: 20px; }
     .category { margin-bottom: 20px; }
     .category-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; cursor: pointer; background: #eaeaea; border: 1px solid #222; padding: 8px; }
     .article-list { display: none; flex-direction: column; gap: 0; border: none; margin-top: 0; }
-    .article-link { background: none; border: none; padding: 0; text-decoration: underline; color: #222; font-size: 1em; display: block; text-align: left; margin: 4px 0; }
-    .article-link:hover { color: #0055cc; }
+    .article-link { background: none; border: none; padding: 0; text-decoration: underline; color: #010de7; font-size: 1em; display: block; text-align: left; margin: 4px 0; }
+    .article-link:hover { color: #022d69; transform: scale(1.01);}
     .category.open .article-list { display: flex; }
     .photo { display: flex; align-items: right;}
   </style>
 </head>
 <body>
+
   <div class="header">wielka księga sprzengla</div>
+  <div id="auth-section" style="max-width:400px;margin:20px auto 0 auto;padding:20px;background:#fff;border:1px solid #222;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+    <div id="login-form">
+      <h3>Zaloguj się lub zarejestruj</h3>
+      <input type="text" id="username" placeholder="Nazwa użytkownika" style="width:100%;margin-bottom:8px;padding:6px;">
+      <input type="password" id="password" placeholder="Hasło" style="width:100%;margin-bottom:8px;padding:6px;">
+      <button onclick="login()">Zaloguj</button>
+      <button onclick="register()">Zarejestruj</button>
+      <div id="auth-msg" style="color:red;margin-top:8px;"></div>
+    </div>
+    <div id="user-panel" style="display:none;">
+      <span id="welcome-msg"></span>
+      <button onclick="logout()">Wyloguj</button>
+      <div id="user-actions"></div>
+    </div>
+  </div>
 
   <div class="search-bar" style="position:relative;">
     <input type="text" id="search" placeholder="Szukaj artykułu..." autocomplete="off" oninput="showSuggestions()" onkeydown="searchKeyDown(event)">
@@ -35,20 +51,17 @@
       <div class="article-list">
         <a class="article-link" href="pipotam.html">Pipotam</a>
         <a class="article-link" href="animal1.html">Meowl</a>
-        <a class="article-link" href="animal2.html">Animal 2</a>
-        <a class="article-link" href="animal3.html">Animal 3</a>
-        <a class="article-link" href="animal4.html">Animal 4</a>
-        <a class="article-link" href="animal5.html">Animal 5</a>
-        <a class="article-link" href="animal6.html">Animal 6</a>
-        <a class="article-link" href="animal7.html">Animal 7</a>
+        <a class="article-link" href="animal2.html">homik</a>
+        <a class="article-link" href="animal3.html">kuc z bronksu</a>
+        
       </div>
     </div>
     <div class="category" id="cat-cars">
-      <div class="category-title" onclick="toggleCategory('cat-cars')">Samochody ▼</div>
+      <div class="category-title" onclick="toggleCategory('cat-cars')">top samochody oat ▼</div>
       <div class="article-list">
-        <a class="article-link" href="car1.html">Car 1</a>
-        <a class="article-link" href="car2.html">Car 2</a>
-        <a class="article-link" href="car3.html">Car 3</a>
+        <a class="article-link" href="car1.html">Civic 4th Generation</a>
+        <a class="article-link" href="car2.html">Porsche 935</a>
+        <a class="article-link" href="car3.html">golf4 aka rakieta</a>
         <a class="article-link" href="car4.html">Car 4</a>
         <a class="article-link" href="car5.html">Car 5</a>
         <a class="article-link" href="car6.html">Car 6</a>
@@ -115,10 +128,10 @@
     document.getElementById('cat-animals').classList.add('open');
 
     // --- Searchbar logic ---
-    // Dynamically collect all article-link names and hrefs
     let articles = [];
     window.addEventListener('DOMContentLoaded', function() {
       articles = Array.from(document.querySelectorAll('.article-link')).map(a => ({name: a.textContent.trim(), link: a.getAttribute('href')}));
+      loadAuth();
     });
 
     function showSuggestions() {
@@ -129,7 +142,6 @@
       const matches = articles.filter(a => a.name.toLowerCase().includes(input)).slice(0,5);
       if (matches.length === 0) { sugg.style.display = 'none'; sugg.innerHTML = ''; return; }
       sugg.innerHTML = matches.map(a => `<li style='padding:6px; cursor:pointer;' onclick="window.location.href='${a.link}'">${a.name}</li>`).join('');
-      // Position suggestions under the input
       const rect = searchInput.getBoundingClientRect();
       sugg.style.left = searchInput.offsetLeft + 'px';
       sugg.style.top = (searchInput.offsetTop + searchInput.offsetHeight) + 'px';
@@ -148,12 +160,138 @@
         searchGo();
       }
     }
-    // Hide suggestions when clicking outside
     document.addEventListener('click', function(e) {
       if (!document.getElementById('search').contains(e.target)) {
         document.getElementById('suggestions').style.display = 'none';
       }
     });
+
+    // --- Simple Auth & Article Submission Logic ---
+    let users = JSON.parse(localStorage.getItem('users') || '{}');
+    let pendingArticles = JSON.parse(localStorage.getItem('pendingArticles') || '[]');
+    let currentUser = localStorage.getItem('currentUser') || null;
+
+    // Ensure admin exists
+    if (!users['sprzenglo']) {
+      users['sprzenglo'] = { password: '123Q123q', articles: [] };
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    function loadAuth() {
+      if (currentUser) {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('user-panel').style.display = 'block';
+        document.getElementById('welcome-msg').textContent = 'Witaj, ' + currentUser + '!';
+        showUserActions();
+      } else {
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('user-panel').style.display = 'none';
+      }
+    }
+
+    function login() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      if (!u || !p) { showAuthMsg('Podaj nazwę i hasło'); return; }
+      if (users[u] && users[u].password === p) {
+        currentUser = u;
+        localStorage.setItem('currentUser', currentUser);
+        showAuthMsg('');
+        loadAuth();
+      } else {
+        showAuthMsg('Błędna nazwa lub hasło');
+      }
+    }
+
+    function register() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      if (!u || !p) { showAuthMsg('Podaj nazwę i hasło'); return; }
+      if (users[u]) { showAuthMsg('Użytkownik już istnieje'); return; }
+      users[u] = { password: p, articles: [] };
+      localStorage.setItem('users', JSON.stringify(users));
+      currentUser = u;
+      localStorage.setItem('currentUser', currentUser);
+      showAuthMsg('');
+      loadAuth();
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      loadAuth();
+    }
+
+    function showAuthMsg(msg) {
+      document.getElementById('auth-msg').textContent = msg;
+    }
+
+    function showUserActions() {
+      const panel = document.getElementById('user-actions');
+      if (currentUser === 'sprzenglo') {
+        // Admin panel
+        panel.innerHTML = `<h4>Panel admina: oczekujące artykuły</h4>` +
+          (pendingArticles.length === 0 ? '<i>Brak oczekujących artykułów</i>' :
+            '<ul>' + pendingArticles.map((a,i) => `<li><b>${a.title}</b> (${a.category})<br>${a.content}<br><button onclick='acceptArticle(${i})'>Akceptuj</button> <button onclick='deleteArticle(${i})'>Usuń</button> <span style='font-size:0.9em;color:#888;'>autor: ${a.author}</span></li>`).join('') + '</ul>');
+      } else {
+        // User panel
+        panel.innerHTML = `<h4>Dodaj artykuł</h4>
+          <select id='article-category'>
+            <option value='Zwierzęta'>Zwierzęta</option>
+            <option value='top samochody oat'>top samochody oat</option>
+            <option value='śmieszne obrazki'>śmieszne obrazki</option>
+            <option value='Kategoria 4'>Kategoria 4</option>
+            <option value='Kategoria 5'>Kategoria 5</option>
+          </select><br>
+          <input type='text' id='article-title' placeholder='Tytuł artykułu' style='width:100%;margin:6px 0;'><br>
+          <textarea id='article-content' placeholder='Treść artykułu' style='width:100%;height:80px;'></textarea><br>
+          <button onclick='submitArticle()'>Wyślij do akceptacji</button>
+          <div id='user-article-msg' style='color:green;margin-top:8px;'></div>
+          <h4>Twoje artykuły oczekujące</h4>
+          <ul>` + pendingArticles.filter(a => a.author === currentUser).map((a,i) => `<li><b>${a.title}</b> (${a.category})<br>${a.content}<br><button onclick='editArticle(${i})'>Edytuj</button></li>`).join('') + '</ul>';
+      }
+    }
+
+    function submitArticle() {
+      const cat = document.getElementById('article-category').value;
+      const title = document.getElementById('article-title').value.trim();
+      const content = document.getElementById('article-content').value.trim();
+      if (!title || !content) {
+        document.getElementById('user-article-msg').textContent = 'Podaj tytuł i treść artykułu';
+        return;
+      }
+      pendingArticles.push({ author: currentUser, category: cat, title, content });
+      localStorage.setItem('pendingArticles', JSON.stringify(pendingArticles));
+      document.getElementById('user-article-msg').textContent = 'Artykuł wysłany do akceptacji!';
+      showUserActions();
+    }
+
+    function editArticle(idx) {
+      const a = pendingArticles[idx];
+      document.getElementById('article-category').value = a.category;
+      document.getElementById('article-title').value = a.title;
+      document.getElementById('article-content').value = a.content;
+      // Remove from pending so user can resubmit
+      pendingArticles.splice(idx, 1);
+      localStorage.setItem('pendingArticles', JSON.stringify(pendingArticles));
+      showUserActions();
+    }
+
+    function acceptArticle(idx) {
+      const a = pendingArticles[idx];
+      // Add to admin's articles (could be extended to add to public list)
+      users['sprzenglo'].articles.push(a);
+      localStorage.setItem('users', JSON.stringify(users));
+      pendingArticles.splice(idx, 1);
+      localStorage.setItem('pendingArticles', JSON.stringify(pendingArticles));
+      showUserActions();
+    }
+
+    function deleteArticle(idx) {
+      pendingArticles.splice(idx, 1);
+      localStorage.setItem('pendingArticles', JSON.stringify(pendingArticles));
+      showUserActions();
+    }
   </script>
 </body>
 </html>
