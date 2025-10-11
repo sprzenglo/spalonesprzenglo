@@ -15,7 +15,7 @@
     .category-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; cursor: pointer; background: #eaeaea; border: 1px solid #222; padding: 8px; }
     .article-list { display: none; flex-direction: column; gap: 0; border: none; margin-top: 0; }
     .article-link { background: none; border: none; padding: 0; text-decoration: underline; color: #010de7; font-size: 1em; display: block; text-align: left; margin: 4px 0; }
-    .article-link:hover { color: #022d69; transform: scale(1.01);}
+    .article-link:hover { color: #022d69; transform: scale(1.01); }
     .category.open .article-list { display: flex; }
     .photo { display: flex; align-items: right;}
   </style>
@@ -52,7 +52,7 @@
 
 <div style="display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto;">
   <div class="contents" style="flex: 1;">
-    <!-- Wszystkie kategorie i artykuły tak jak w Twoim HTML -->
+    <!-- Kategorie i artykuły -->
     <div class="category" id="cat-animals">
       <div class="category-title" onclick="toggleCategory('cat-animals')">Zwierzęta ▼</div>
       <div class="article-list">
@@ -88,7 +88,7 @@
         <a class="article-link" href="meme8.html">Meme 8</a>
       </div>
     </div>
-    <!-- pozostałe kategorie w tym samym stylu -->
+    <!-- Dodaj pozostałe kategorie w tym samym stylu -->
   </div>
   <div>
     <img src="pipotam.gif" alt="pipotam" style="max-width:220px; margin-left:30px; border:1px solid #222;">
@@ -100,15 +100,13 @@
 <script>
 const API_BASE = 'https://spalonesprzenglo-backend.onrender.com'; // Twój backend
 
-// Show/hide auth section
+// --- UI ---
 function showAuthSection() { document.getElementById('auth-section').style.display='block'; document.getElementById('open-auth-btn').style.display='none'; }
 function hideAuthSection() { document.getElementById('auth-section').style.display='none'; document.getElementById('open-auth-btn').style.display='block'; }
-
-// Collapsible categories
 function toggleCategory(id) { document.getElementById(id).classList.toggle('open'); }
 document.getElementById('cat-animals').classList.add('open');
 
-// Search
+// --- Search ---
 let articles = [];
 window.addEventListener('DOMContentLoaded', () => {
   articles = Array.from(document.querySelectorAll('.article-link')).map(a => ({name:a.textContent.trim(), link:a.getAttribute('href')}));
@@ -127,20 +125,17 @@ function showSuggestions() {
   sugg.style.top = (searchInput.offsetTop+searchInput.offsetHeight)+'px';
   sugg.style.display='block';
 }
-
 function searchGo() {
   const input = document.getElementById('search').value.trim().toLowerCase();
   if (!input) return;
   const match = articles.find(a=>a.name.toLowerCase()===input)||articles.find(a=>a.name.toLowerCase().includes(input));
   if(match) window.location.href=match.link;
 }
-
 function searchKeyDown(e) { if(e.key==='Enter') searchGo(); }
 document.addEventListener('click', e => { if(!document.getElementById('search').contains(e.target)) document.getElementById('suggestions').style.display='none'; });
 
 // --- Auth & Article Logic ---
 let currentUser = null;
-let pendingArticles = [];
 
 async function register() {
   const u=document.getElementById('username').value.trim();
