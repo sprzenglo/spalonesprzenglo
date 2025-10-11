@@ -18,13 +18,6 @@
     .article-link:hover { color: #022d69; transform: scale(1.01);}
     .category.open .article-list { display: flex; }
     .photo { display: flex; align-items: right;}
-    /* --- czat --- */
-    #chat-container { margin-left: 30px; max-width: 220px; border: 1px solid #222; padding: 8px; background: #fff; height: 400px; overflow-y: auto; display: flex; flex-direction: column; }
-    #chat-messages { list-style: none; margin: 0; padding: 0; flex: 1; overflow-y: auto; }
-    #chat-input { margin-top: 8px; width: 100%; box-sizing: border-box; padding: 4px; }
-    #chat-send { margin-top: 4px; padding: 4px; width: 100%; }
-    .chat-message { padding: 2px 4px; border-bottom: 1px solid #ccc; }
-    .chat-message span { cursor: pointer; color: red; float: right; font-size: 0.8em; }
   </style>
 </head>
 <body>
@@ -35,103 +28,96 @@
     <button onclick="searchGo()">Szukaj</button>
     <ul id="suggestions" style="position:absolute; left:0; background:#fff; border:1px solid #222; width:300px; list-style:none; margin:0; padding:0; z-index:10; display:none;"></ul>
   </div>
-
   <div style="display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto;">
     <div class="contents" style="flex: 1;">
-      <!-- Kategorie (wszystkie zachowane) -->
-      <div class="category" id="cat-animals">
-        <div class="category-title" onclick="toggleCategory('cat-animals')">Zwierzęta ▼</div>
-        <div class="article-list">
-          <a class="article-link" href="pipotam.html">Pipotam</a>
-          <a class="article-link" href="animal1.html">Meowl</a>
-          <a class="article-link" href="animal2.html">homik</a>
-          <a class="article-link" href="animal3.html">kuc z bronksu</a>
-        </div>
-      </div>
-      <div class="category" id="cat-cars">
-        <div class="category-title" onclick="toggleCategory('cat-cars')">top samochody oat ▼</div>
-        <div class="article-list">
-          <a class="article-link" href="car1.html">Civic 4th Generation</a>
-          <a class="article-link" href="car2.html">Porsche 935</a>
-          <a class="article-link" href="car3.html">golf4 aka rakieta</a>
-          <a class="article-link" href="car4.html">Car 4</a>
-          <a class="article-link" href="car5.html">Car 5</a>
-          <a class="article-link" href="car6.html">Car 6</a>
-          <a class="article-link" href="car7.html">Car 7</a>
-          <a class="article-link" href="car8.html">Car 8</a>
-        </div>
-      </div>
-      <div class="category" id="cat-memes">
-        <div class="category-title" onclick="toggleCategory('cat-memes')">śmieszne obrazki ▼</div>
-        <div class="article-list">
-          <a class="article-link" href="meme1.html">67 dziecko</a>
-          <a class="article-link" href="meme2.html">Meme 2</a>
-          <a class="article-link" href="meme3.html">Meme 3</a>
-          <a class="article-link" href="meme4.html">Meme 4</a>
-          <a class="article-link" href="meme5.html">Meme 5</a>
-          <a class="article-link" href="meme6.html">Meme 6</a>
-          <a class="article-link" href="meme7.html">Meme 7</a>
-          <a class="article-link" href="meme8.html">Meme 8</a>
-        </div>
-      </div>
-      <div class="category" id="cat-4">
-        <div class="category-title" onclick="toggleCategory('cat-4')">Kategoria 4 ▼</div>
-        <div class="article-list">
-          <a class="article-link" href="cat4_1.html">Cat4 1</a>
-          <a class="article-link" href="cat4_2.html">Cat4 2</a>
-          <a class="article-link" href="cat4_3.html">Cat4 3</a>
-          <a class="article-link" href="cat4_4.html">Cat4 4</a>
-          <a class="article-link" href="cat4_5.html">Cat4 5</a>
-          <a class="article-link" href="cat4_6.html">Cat4 6</a>
-          <a class="article-link" href="cat4_7.html">Cat4 7</a>
-          <a class="article-link" href="cat4_8.html">Cat4 8</a>
-        </div>
-      </div>
-      <div class="category" id="cat-5">
-        <div class="category-title" onclick="toggleCategory('cat-5')">Kategoria 5 ▼</div>
-        <div class="article-list">
-          <a class="article-link" href="cat5_1.html">Cat5 1</a>
-          <a class="article-link" href="cat5_2.html">Cat5 2</a>
-          <a class="article-link" href="cat5_3.html">Cat5 3</a>
-          <a class="article-link" href="cat5_4.html">Cat5 4</a>
-          <a class="article-link" href="cat5_5.html">Cat5 5</a>
-          <a class="article-link" href="cat5_6.html">Cat5 6</a>
-          <a class="article-link" href="cat5_7.html">Cat5 7</a>
-          <a class="article-link" href="cat5_8.html">Cat5 8</a>
-        </div>
+    <div class="category" id="cat-animals">
+      <div class="category-title" onclick="toggleCategory('cat-animals')">Zwierzęta ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="pipotam.html">Pipotam</a>
+        <a class="article-link" href="animal1.html">Meowl</a>
+        <a class="article-link" href="animal2.html">homik</a>
+        <a class="article-link" href="animal3.html">kuc z bronksu</a>
+        
       </div>
     </div>
-
-    <!-- Kolumna po prawej: zdjęcia + czat -->
+    <div class="category" id="cat-cars">
+      <div class="category-title" onclick="toggleCategory('cat-cars')">top samochody oat ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="car1.html">Civic 4th Generation</a>
+        <a class="article-link" href="car2.html">Porsche 935</a>
+        <a class="article-link" href="car3.html">golf4 aka rakieta</a>
+        <a class="article-link" href="car4.html">Car 4</a>
+        <a class="article-link" href="car5.html">Car 5</a>
+        <a class="article-link" href="car6.html">Car 6</a>
+        <a class="article-link" href="car7.html">Car 7</a>
+        <a class="article-link" href="car8.html">Car 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-memes">
+      <div class="category-title" onclick="toggleCategory('cat-memes')">śmieszne obrazki ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="meme1.html">67 dziecko</a>
+        <a class="article-link" href="meme2.html">Meme 2</a>
+        <a class="article-link" href="meme3.html">Meme 3</a>
+        <a class="article-link" href="meme4.html">Meme 4</a>
+        <a class="article-link" href="meme5.html">Meme 5</a>
+        <a class="article-link" href="meme6.html">Meme 6</a>
+        <a class="article-link" href="meme7.html">Meme 7</a>
+        <a class="article-link" href="meme8.html">Meme 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-4">
+      <div class="category-title" onclick="toggleCategory('cat-4')">Kategoria 4 ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="cat4_1.html">Cat4 1</a>
+        <a class="article-link" href="cat4_2.html">Cat4 2</a>
+        <a class="article-link" href="cat4_3.html">Cat4 3</a>
+        <a class="article-link" href="cat4_4.html">Cat4 4</a>
+        <a class="article-link" href="cat4_5.html">Cat4 5</a>
+        <a class="article-link" href="cat4_6.html">Cat4 6</a>
+        <a class="article-link" href="cat4_7.html">Cat4 7</a>
+        <a class="article-link" href="cat4_8.html">Cat4 8</a>
+      </div>
+    </div>
+    <div class="category" id="cat-5">
+      <div class="category-title" onclick="toggleCategory('cat-5')">Kategoria 5 ▼</div>
+      <div class="article-list">
+        <a class="article-link" href="cat5_1.html">Cat5 1</a>
+        <a class="article-link" href="cat5_2.html">Cat5 2</a>
+        <a class="article-link" href="cat5_3.html">Cat5 3</a>
+        <a class="article-link" href="cat5_4.html">Cat5 4</a>
+        <a class="article-link" href="cat5_5.html">Cat5 5</a>
+        <a class="article-link" href="cat5_6.html">Cat5 6</a>
+        <a class="article-link" href="cat5_7.html">Cat5 7</a>
+        <a class="article-link" href="cat5_8.html">Cat5 8</a>
+      </div>
+    </div>
+    </div>
     <div>
       <img src="pipotam.gif" alt="pipotam" style="max-width:220px; margin-left:30px; border:1px solid #222;">
       <br>
-      <img src="meowl.webp" alt="meowl" style="max-width:220px; margin-left:30px; border:1px solid #222; margin-top:10px;">
-      
-      <!-- Czat -->
-      <div id="chat-container">
-        <ul id="chat-messages"></ul>
-        <input type="text" id="chat-input" placeholder="Napisz wiadomość...">
-        <button id="chat-send">Wyślij</button>
-      </div>
+      <img src="meowl.webp" alt="meowl" style="max-width:220px; margin-left:30px; border:1px solid #222;">
     </div>
   </div>
-
   <script>
-    const API_URL = 'https://spalonesprzenglo-backend.onrender.com';
-
-    // --- Kategorie ---
+    // --- Collapsible categories ---
     function toggleCategory(id) {
-      const cat = document.getElementById(id);
-      cat.classList.toggle('open');
+      var cat = document.getElementById(id);
+      if (cat.classList.contains('open')) {
+        cat.classList.remove('open');
+      } else {
+        cat.classList.add('open');
+      }
     }
     document.getElementById('cat-animals').classList.add('open');
 
-    // --- Wyszukiwarka ---
+    // --- Searchbar logic ---
+    // Dynamically collect all article-link names and hrefs
     let articles = [];
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', function() {
       articles = Array.from(document.querySelectorAll('.article-link')).map(a => ({name: a.textContent.trim(), link: a.getAttribute('href')}));
     });
+
     function showSuggestions() {
       const input = document.getElementById('search').value.trim().toLowerCase();
       const sugg = document.getElementById('suggestions');
@@ -140,61 +126,31 @@
       const matches = articles.filter(a => a.name.toLowerCase().includes(input)).slice(0,5);
       if (matches.length === 0) { sugg.style.display = 'none'; sugg.innerHTML = ''; return; }
       sugg.innerHTML = matches.map(a => `<li style='padding:6px; cursor:pointer;' onclick="window.location.href='${a.link}'">${a.name}</li>`).join('');
+      // Position suggestions under the input
+      const rect = searchInput.getBoundingClientRect();
       sugg.style.left = searchInput.offsetLeft + 'px';
       sugg.style.top = (searchInput.offsetTop + searchInput.offsetHeight) + 'px';
       sugg.style.display = 'block';
     }
+
     function searchGo() {
       const input = document.getElementById('search').value.trim().toLowerCase();
       if (!input) return;
       const match = articles.find(a => a.name.toLowerCase() === input) || articles.find(a => a.name.toLowerCase().includes(input));
       if (match) window.location.href = match.link;
     }
-    function searchKeyDown(e) { if (e.key === 'Enter') searchGo(); }
-    document.addEventListener('click', e => { if (!document.getElementById('search').contains(e.target)) document.getElementById('suggestions').style.display = 'none'; });
 
-    // --- CZAT ---
-    const chatInput = document.getElementById('chat-input');
-    const chatSend = document.getElementById('chat-send');
-    const chatMessages = document.getElementById('chat-messages');
-
-    async function loadMessages() {
-      try {
-        const res = await fetch(`${API_URL}/messages`);
-        const data = await res.json();
-        chatMessages.innerHTML = data.map(m => `
-          <li class="chat-message">
-            ${m.text} <span onclick="deleteMessage('${m._id}')">x</span>
-          </li>`).join('');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      } catch (err) {
-        console.error(err);
+    function searchKeyDown(e) {
+      if (e.key === 'Enter') {
+        searchGo();
       }
     }
-
-    async function sendMessage() {
-      if (!chatInput.value.trim()) return;
-      await fetch(`${API_URL}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: chatInput.value })
-      });
-      chatInput.value = '';
-      loadMessages();
-    }
-
-    async function deleteMessage(id) {
-      const password = prompt('Podaj hasło, aby usunąć wiadomość:');
-      if (!password) return;
-      await fetch(`${API_URL}/messages/${id}?password=${password}`, { method: 'DELETE' });
-      loadMessages();
-    }
-
-    chatSend.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keydown', e => { if(e.key==='Enter') sendMessage(); });
-
-    setInterval(loadMessages, 2000);
-    loadMessages();
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('search').contains(e.target)) {
+        document.getElementById('suggestions').style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
