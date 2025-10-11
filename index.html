@@ -190,10 +190,25 @@
       }
     });
 
-    // --- Video toggle ---
+ <!-- PLAYER MP4 NA DOLE STRONY -->
+  <div class="video-section">
+    <!-- ⬇️ Wklej tu własny plik MP4 -->
+    <video id="myVideo" src="EL_ROMPECABEZAS_MAS_DIFICIL_PARA_LOS_GENIUS.mp4" controlslist="nodownload"></video>
+
+    <div style="margin-top: 10px;">
+      <button class="play-btn" onclick="toggleVideo()">▶️ Odtwórz film</button>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" style="width:150px; margin-left:10px;">
+      <button class="play-btn" onclick="toggleFullscreen()">⛶ Pełny ekran</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Nowy player z obsługą głośności i fullscreen ---
+    const video = document.getElementById('myVideo');
+    const btn = document.querySelector('.play-btn');
+    const volumeSlider = document.getElementById('volumeSlider');
+
     function toggleVideo() {
-      const video = document.getElementById('myVideo');
-      const btn = document.querySelector('.play-btn');
       if (video.paused) {
         video.play();
         btn.textContent = '⏸️ Pauzuj film';
@@ -202,6 +217,25 @@
         btn.textContent = '▶️ Odtwórz film';
       }
     }
+
+    // Zmiana głośności
+    volumeSlider.addEventListener('input', function() {
+      video.volume = this.value;
+    });
+
+    // Tryb pełnoekranowy
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Automatyczna zmiana przycisku po zakończeniu filmu
+    video.addEventListener('ended', function() {
+      btn.textContent = '▶️ Odtwórz film';
+    });
   </script>
 </body>
 </html>
