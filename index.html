@@ -168,39 +168,21 @@
   </div>
     <div style="text-align: left; margin-left: 40px; margin-bottom: 60px;">
     <img src="maryjka.jpg" alt="maryjka" 
-         style="max-width: 250px; border: 1px solid #222; display: block; margin-bottom: 15px;">   
-                <!-- Prosty odtwarzacz MP3 -->
-<audio id="player" src="agartha.mp3"></audio>
+         style="max-width: 250px; border: 1px solid #222; display: block; margin-bottom: 15px;">
+      <h2>peak music</h2>
+    <audio id="audioPlayer" controls>
+        <source src="agartha.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
-<div style="display:flex;align-items:center;gap:10px;">
-  <button onclick="togglePlay()" id="playBtn">▶️ Odtwórz</button>
-  <label>Głośność:
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" oninput="setVolume(this.value)">
-  </label>
-</div>
-
-<script>
-  const audio = document.getElementById('player');
-  const btn = document.getElementById('playBtn');
-
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play();
-      btn.textContent = '⏸️ Pauza';
-    } else {
-      audio.pause();
-      btn.textContent = '▶️ Odtwórz';
-    }
-  }
-
-  function setVolume(v) {
-    audio.volume = v;
-  }
-</script>
+    <script>
+        const audio = document.getElementById('audioPlayer');
+    </script>
 
   </div>
 </body>
 </html>
+
 
 
 
